@@ -1,0 +1,6 @@
+framework module KinGrpcApi {
+  umbrella header "KinGrpcApi-umbrella.h"
+
+  export *
+  module * { export * }
+}

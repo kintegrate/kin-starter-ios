@@ -1,0 +1,6 @@
+framework module KinBase {
+  umbrella header "KinBase-umbrella.h"
+
+  export *
+  module * { export * }
+}
