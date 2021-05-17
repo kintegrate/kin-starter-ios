@@ -15,7 +15,6 @@ class Kin {
     private enum Constants {
 
         static let minAPIVersion: Int = 4
-        static let paymentSpacerWindow: TimeInterval = 60.0
     }
 
     typealias KinBalanceBlock = (KinBalance) -> ()
@@ -36,7 +35,6 @@ class Kin {
         }
     }
     private var disposeBag = DisposeBag()
-    private var lastPaymentDate: Date?
     
     private lazy var kinEnvironment: KinEnvironment = {
         if isProduction {
@@ -205,8 +203,7 @@ class Kin {
             memo: memo
         ).then(
             on: .main,
-            {[weak self]  payment in
-                self?.lastPaymentDate = Date()
+            { payment in
                 completion(.success(payment))
             }
         ).catch(
