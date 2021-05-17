@@ -150,7 +150,6 @@ class ViewController: UIViewController {
         setupKin()
         
         checkKinBalance()
-        
     }
     
     override func viewWillLayoutSubviews() {

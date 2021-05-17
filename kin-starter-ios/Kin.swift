@@ -195,7 +195,6 @@ class Kin {
                 completion(.failure(error))
             }
         )
-        
     }
     
     private func paymentTimeFrameIsValid() -> Bool {
