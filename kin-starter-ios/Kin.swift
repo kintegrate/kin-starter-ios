@@ -54,6 +54,17 @@ class Kin {
     
     // MARK: - Lifecycle
     
+    /**
+     Initializes a `Kin` object.
+     
+     - Parameter isProduction: Boolean indicating if  the `KinEnvironment` is in production or test
+     - Parameter appIndex: App Index assigned by the Kin Foundation
+     - Parameter appAddress: Blockchain address for the app in stellarBase32Encoded format ex: `GAYSJAFQ4WHU6OOGPNF3MULUMXHFBHTKN4M7O466VDGCY4GR5CV4LL6Q`
+     - Parameter credentialUser: User id of `AppUserCredentials` sent to your webhook for authentication
+     - Parameter credentialPassword: Password of `AppUserCredentials` sent to your webhook for authentication
+     - Parameter onBalanceChanged: Callback to notify the app of balance changes
+     - Parameter onPaymentHappened: Callback to notify the app of payment changes
+    */
     init(isProduction: Bool,
          appIndex: Int,
          appAddress: String,
@@ -106,10 +117,16 @@ class Kin {
     
     // MARK: - Account Info
     
+    /**
+        Returns the account's public blockchain address
+     */
     func address() -> String? {
         return kinAccountContext?.accountId
     }
 
+    /**
+        Force the account to refresh in order to retrieve up to date balance information.
+     */
     func checkBalance(completion: @escaping (Result<KinBalance, Error>) -> ()) {
         kinAccountContext?.getAccount(
             forceUpdate: true
@@ -155,6 +172,13 @@ class Kin {
     
     // MARK: - Payments
     
+    /**
+    Sends Kin to the designated address
+     - Parameter payments: List of items and costs in a single transaction.
+     - Parameter address: Destination address
+     - Parameter paymentType:`KinBinaryMemo.TransferType` of Earn, Spend or P2P (for record keeping)
+     - Parameter completion: A closure called on success or failure of the send operation
+     */
     func sendKin(payments: [KinPaymentInfo],
                  address: String,
                  paymentType: KinBinaryMemo.TransferType,
