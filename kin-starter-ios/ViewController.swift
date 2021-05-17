@@ -259,9 +259,10 @@ class ViewController: UIViewController {
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "Okay",
-                          style: .default,
-                          handler: nil
+            UIAlertAction(
+                title: "Okay",
+                style: .default,
+                handler: nil
             )
         )
         present(
@@ -280,9 +281,10 @@ class ViewController: UIViewController {
         
 
         alert.addAction(
-            UIAlertAction(title: "Okay",
-                          style: .default,
-                          handler: nil
+            UIAlertAction(
+                title: "Okay",
+                style: .default,
+                handler: nil
             )
         )
         present(
