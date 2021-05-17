@@ -207,7 +207,7 @@ class ViewController: UIViewController {
             credentialUser: Constants.credentialUser,
             credentialPassword: Constants.credentialPassword,
             onBalanceChanged: { [weak self] balance in
-                self?.checkKinBalance()
+                self?.balance = balance.amount
             },
             onPaymentHappened: { [weak self] payment in
                 self?.checkKinBalance()
@@ -272,15 +272,9 @@ class ViewController: UIViewController {
     }
     
     func show(error: Error) {
-        let message: String = {
-            if let error = error as? Kin.KinError, case Kin.KinError.tooManyTransactions = error {
-                return  "It seems that sendKin transactions will *succeed* even thuogh the account balance will not update and the logs will show a message along the lines of ALREADY_SUBMITTED. The SDK does not produce an error in this case. This error is to force time between transactions"
-            }
-            return error.localizedDescription
-        }()
         let alert = UIAlertController(
             title: "Oops!",
-            message: "Looks like something went wrong. Here's a hint: \n\n Error: \(String(describing: error)) \n\n Description: \(message)",
+            message: "Looks like something went wrong. Here's a hint: \n\n Error: \(String(describing: error)) \n\n Description: \(error.localizedDescription)",
             preferredStyle: .alert
         )
         

@@ -158,12 +158,7 @@ class Kin {
                  address: String,
                  paymentType: KinBinaryMemo.TransferType,
                  completion: @escaping (Result<KinPayment, Error>) -> ()) {
-        
-        guard paymentTimeFrameIsValid() else {
-            completion(.failure(KinError.tooManyTransactions))
-            return
-        }
-        
+
         guard let invoice = try? buildInvoice(payments: payments) else {
             completion(.failure(KinError.couldNotCreateInvoice))
             return
@@ -196,15 +191,7 @@ class Kin {
             }
         )
     }
-    
-    private func paymentTimeFrameIsValid() -> Bool {
-        guard let lastTransactionDate = lastPaymentDate else {
-            return true
-        }
-        
-        return Date().timeIntervalSince(lastTransactionDate) > Constants.paymentSpacerWindow
-    }
-    
+
     private func buildInvoice(payments: [KinPaymentInfo]) throws -> Invoice {
         let lineItems = try payments.map { payment in
             return try LineItem(
@@ -257,7 +244,6 @@ extension Kin {
     
     enum KinError: Error {
         
-        case tooManyTransactions
         case couldNotGetIdForContext
         case couldNotCreateInvoice
         case couldNotCreateMemo
