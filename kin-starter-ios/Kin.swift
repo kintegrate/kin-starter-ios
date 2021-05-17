@@ -46,6 +46,7 @@ class Kin {
             )
         } else {
             return KinEnvironment.Agora.testNet(
+                appInfoProvider: self,
                 minApiVersion: Constants.minAPIVersion
             )
         }
@@ -266,6 +267,6 @@ extension Bundle {
     }
     
     var appName: String? {
-        return infoDictionary?["CFBundleDisplayName"] as? String
+        return infoDictionary?["CFBundleName"] as? String
     }
 }
