@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		6DFDAE5E5784A3D48257F940 /* Pods_kin_starter_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D20B3CB540C823D83919FD6 /* Pods_kin_starter_iosTests.framework */; };
+		B68888A92651971C00552EFC /* Kin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68888A82651971C00552EFC /* Kin.swift */; };
 		B6A261912651925500283E93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A261902651925500283E93 /* AppDelegate.swift */; };
 		B6A261952651925500283E93 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A261942651925500283E93 /* ViewController.swift */; };
 		B6A2619A2651925A00283E93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6A261992651925A00283E93 /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		6012906149078604DB3CE332 /* Pods-kin-starter-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kin-starter-iosTests.release.xcconfig"; path = "Target Support Files/Pods-kin-starter-iosTests/Pods-kin-starter-iosTests.release.xcconfig"; sourceTree = "<group>"; };
 		91AE29740FAA51B640BB79A7 /* Pods-kin-starter-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kin-starter-iosTests.debug.xcconfig"; path = "Target Support Files/Pods-kin-starter-iosTests/Pods-kin-starter-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B188BF50520013DF472E0721 /* Pods-kin-starter-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kin-starter-ios.release.xcconfig"; path = "Target Support Files/Pods-kin-starter-ios/Pods-kin-starter-ios.release.xcconfig"; sourceTree = "<group>"; };
+		B68888A82651971C00552EFC /* Kin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kin.swift; sourceTree = "<group>"; };
 		B6A2618D2651925500283E93 /* kin-starter-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "kin-starter-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A261902651925500283E93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B6A261942651925500283E93 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,7 +83,6 @@
 				91AE29740FAA51B640BB79A7 /* Pods-kin-starter-iosTests.debug.xcconfig */,
 				6012906149078604DB3CE332 /* Pods-kin-starter-iosTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -113,6 +114,7 @@
 				B6A261992651925A00283E93 /* Assets.xcassets */,
 				B6A2619B2651925A00283E93 /* LaunchScreen.storyboard */,
 				B6A2619E2651925A00283E93 /* Info.plist */,
+				B68888A82651971C00552EFC /* Kin.swift */,
 			);
 			path = "kin-starter-ios";
 			sourceTree = "<group>";
@@ -295,6 +297,7 @@
 			files = (
 				B6A261952651925500283E93 /* ViewController.swift in Sources */,
 				B6A261912651925500283E93 /* AppDelegate.swift in Sources */,
+				B68888A92651971C00552EFC /* Kin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
