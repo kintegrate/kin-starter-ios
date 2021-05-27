@@ -147,9 +147,7 @@ class ViewController: UIViewController {
         view.addSubview(addToTestBalanceButton)
         view.addSubview(sendKinButton)
         
-        setupKin()
-        
-        checkKinBalance()
+        setupKin()        
     }
     
     override func viewWillLayoutSubviews() {
