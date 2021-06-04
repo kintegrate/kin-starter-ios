@@ -123,16 +123,28 @@ class Kin {
     }
 
     /**
-        Force the account to refresh in order to retrieve up to date balance information.
+        Force the account to refresh in order to retrieve up to date balance information. Completion called on the main thread.
      */
     func checkBalance(completion: @escaping (Result<KinBalance, Error>) -> ()) {
-        kinAccountContext?.getAccount(
+        guard let context = kinAccountContext else {
+            DispatchQueue.main.async {
+                completion(.failure(KinError.contextNotInitialized))
+            }
+            return
+        }
+        context.getAccount(
             forceUpdate: true
-        ).then({ account in
-            completion(.success(account.balance))
-        }).catch({ (error) in
-            completion(.failure(error))
-        })
+        ).then(
+            on: .main,
+            { account in
+                completion(.success(account.balance))
+            }
+        ).catch(
+            on: .main,
+            { (error) in
+                completion(.failure(error))
+            }
+        )
     }
     
     // MARK: - Context
@@ -171,7 +183,7 @@ class Kin {
     // MARK: - Payments
     
     /**
-    Sends Kin to the designated address
+    Sends Kin to the designated address. Completion called on the main thread.
      - Parameter payments: List of items and costs in a single transaction.
      - Parameter address: Destination address
      - Parameter paymentType:`KinBinaryMemo.TransferType` of Earn, Spend or P2P (for record keeping)
@@ -183,12 +195,16 @@ class Kin {
                  completion: @escaping (Result<KinPayment, Error>) -> ()) {
 
         guard let invoice = try? buildInvoice(payments: payments) else {
-            completion(.failure(KinError.couldNotCreateInvoice))
+            DispatchQueue.main.async {
+                completion(.failure(KinError.couldNotCreateInvoice))
+            }
             return
         }
         
         guard let memo = try? buildMemo(invoice: invoice, transferType: paymentType) else {
-            completion(.failure(KinError.couldNotCreateMemo))
+            DispatchQueue.main.async {
+                completion(.failure(KinError.couldNotCreateMemo))
+            }
             return
         }
         
@@ -266,6 +282,7 @@ extension Kin {
     
     enum KinError: Error {
         
+        case contextNotInitialized
         case couldNotGetIdForContext
         case couldNotCreateInvoice
         case couldNotCreateMemo
