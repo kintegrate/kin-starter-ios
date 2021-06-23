@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import stellarsdk
-import KinGrpcApi
 
 // MARK: Models to KinStorage Objects
 extension PublicKey {
@@ -16,6 +14,12 @@ extension PublicKey {
         let storable = KinStoragePublicKey()
         storable.value = Data(bytes)
         return storable
+    }
+}
+
+extension AccountDescription {
+    var storableObject: KinStoragePublicKey {
+        publicKey.storableObject
     }
 }
 
@@ -42,11 +46,11 @@ extension KinAccount.Status {
 extension KinAccount {
     var storableObject: KinStorageKinAccount {
         let storable = KinStorageKinAccount()
-        storable.publicKey = key.publicKey.storableObject
+        storable.publicKey = publicKey.storableObject
         storable.balance = balance.storableObject
         storable.status = status.storableObject
         storable.sequenceNumber = sequence ?? 0
-        storable.accountsArray = NSMutableArray(array: tokenAccounts.map { it in it.publicKey.storableObject })
+        storable.accountsArray = NSMutableArray(array: tokenAccounts.map { $0.storableObject })
         return storable
     }
 }
@@ -69,7 +73,7 @@ extension KinTransaction {
         let storable = KinStorageKinTransaction()
         storable.envelopeXdr = Data(envelopeXdrBytes)
         storable.status = record.recordType.storableObject
-        storable.resultXdr = record.resultXdrBytes != nil ? Data(record.resultXdrBytes!) : nil
+        storable.resultXdr = nil
         storable.timestamp = Int64(record.timestamp)
         storable.pagingToken = record.pagingToken
         return storable
@@ -110,8 +114,8 @@ extension InvoiceList {
 
 // MARK: KinStorage Objects to Models
 extension KinStoragePublicKey {
-    var publicKey: PublicKey? {
-        return try? PublicKey([Byte](value))
+    var publicKey: PublicKey {
+        PublicKey(value)!
     }
 }
 
@@ -134,23 +138,24 @@ extension KinStorageKinAccount_Status {
 
 extension KinStorageKinAccount {
     var kinAccount: KinAccount? {
-        guard hasPublicKey, let pk = publicKey.publicKey else {
+        guard hasPublicKey else {
             return nil
         }
-
-        let key = KinAccount.Key(publicKey: pk)
+        
         let kinBalance = hasBalance ? balance.kinBalance : KinBalance.zero
-        var tokenAccounts = [KinAccount.Key]()
-        accountsArray.forEach { it in
-            if let element = it as? KinStoragePublicKey {
-                tokenAccounts.append(KinAccount.Key(publicKey:element.publicKey!))
+        var tokenAccounts: [PublicKey] = []
+        accountsArray.forEach { account in
+            if let key = account as? KinStoragePublicKey {
+                tokenAccounts.append(key.publicKey)
             }
         }
-        let account = KinAccount(key: key,
-                                 balance: kinBalance,
-                                 status: status.kinAccountStatus,
-                                 sequence: sequenceNumber,
-                                 tokenAccounts: tokenAccounts)
+        let account = KinAccount(
+            publicKey: publicKey.publicKey,
+            balance: kinBalance,
+            status: status.kinAccountStatus,
+            sequence: sequenceNumber,
+            tokenAccounts: tokenAccounts.map { AccountDescription(publicKey: $0, balance: nil, closeAuthority: nil) }
+        )
         return account
     }
 }
@@ -177,17 +182,16 @@ extension KinStorageKinTransaction {
         case .inFlight:
             record = .inFlight(ts: TimeInterval(timestamp))
         case .acknowledged:
-            record = .acknowledged(ts: TimeInterval(timestamp),
-                                   resultXdrBytes: [Byte](resultXdr))
+            record = .acknowledged(ts: TimeInterval(timestamp))
         case .historical:
-            record = .historical(ts: TimeInterval(timestamp),
-                                 resultXdrBytes: [Byte](resultXdr),
-                                 pagingToken: pagingToken)
+            record = .historical(ts: TimeInterval(timestamp), pagingToken: pagingToken)
         }
 
-        return try? KinTransaction(envelopeXdrBytes: [Byte](envelopeXdr),
-                                   record: record,
-                                   network: network)
+        return try? KinTransaction(
+            envelopeXdrBytes: [Byte](envelopeXdr),
+            record: record,
+            network: network
+        )
     }
 }
 
