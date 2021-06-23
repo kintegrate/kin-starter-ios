@@ -253,7 +253,7 @@ class ViewController: UIViewController {
     func showSuccess(payment: KinPayment) {
         let alert = UIAlertController(
             title: "Noice!",
-            message: "You sent a payment! \n\nFrom: \(payment.sourceAccountId)\n\nTo: \(payment.destAccountId)\n\n Amount: \(payment.amount)",
+            message: "You sent a payment! \n\nFrom: \(payment.sourceAccount.base58)\n\nTo: \(payment.destAccount.base58)\n\n Amount: \(payment.amount)",
             preferredStyle: .alert
         )
         alert.addAction(

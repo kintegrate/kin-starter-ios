@@ -45,6 +45,7 @@ class Kin {
         } else {
             return KinEnvironment.Agora.testNet(
                 appInfoProvider: self,
+                enableLogging: true,
                 minApiVersion: Constants.minAPIVersion
             )
         }
@@ -119,7 +120,7 @@ class Kin {
         Returns the account's public blockchain address
      */
     func address() -> String? {
-        return kinAccountContext?.accountId
+        return kinAccountContext?.accountPublicKey.stellarID
     }
 
     /**
@@ -165,15 +166,15 @@ class Kin {
         }
     }
     
-    private func createAccount() -> KinAccount.Id? {
+    private func createAccount() -> PublicKey? {
         return try? KinAccountContext
             .Builder(env: kinEnvironment)
             .createNewAccount()
             .build()
-            .accountId
+            .accountPublicKey
     }
     
-    private func getContext(for accountId: KinAccount.Id) -> KinAccountContext {
+    private func getContext(for accountId: PublicKey) -> KinAccountContext {
         return KinAccountContext
             .Builder(env: kinEnvironment)
             .useExistingAccount(accountId)
@@ -213,7 +214,7 @@ class Kin {
         kinAccountContext?.sendKinPayment(
             KinPaymentItem(
                 amount: amount,
-                destAccountId: address,
+                destAccount: PublicKey(stellarID: address)!,
                 invoice: invoice
             ),
             memo: memo
@@ -264,7 +265,7 @@ extension Kin: AppInfoProvider {
     var appInfo: AppInfo {
         return AppInfo(
             appIdx: AppIndex(value: UInt16(appIndex)),
-            kinAccountId: appAddress,
+            kinAccount: PublicKey(stellarID: appAddress)!,
             name: Bundle.main.appName ?? "kin-starter-ios",
             appIconData: Bundle.main.appIconData ?? Data()
         )
