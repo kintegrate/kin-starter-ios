@@ -211,10 +211,17 @@ class Kin {
         
         let amount = invoiceTotal(payments: payments)
 
+        guard let publicKey = PublicKey(stellarID: address) else {
+            DispatchQueue.main.async {
+                completion(.failure(KinError.couldNotParseAddress))
+            }
+            return
+        }
+        
         kinAccountContext?.sendKinPayment(
             KinPaymentItem(
                 amount: amount,
-                destAccount: PublicKey(stellarID: address)!,
+                destAccount: publicKey,
                 invoice: invoice
             ),
             memo: memo
@@ -265,7 +272,7 @@ extension Kin: AppInfoProvider {
     var appInfo: AppInfo {
         return AppInfo(
             appIdx: AppIndex(value: UInt16(appIndex)),
-            kinAccount: PublicKey(stellarID: appAddress)!,
+            kinAccount: PublicKey(stellarID: appAddress) ?? .zero,
             name: Bundle.main.appName ?? "kin-starter-ios",
             appIconData: Bundle.main.appIconData ?? Data()
         )
@@ -287,6 +294,7 @@ extension Kin {
         case couldNotGetIdForContext
         case couldNotCreateInvoice
         case couldNotCreateMemo
+        case couldNotParseAddress
     }
     
     struct KinPaymentInfo {
