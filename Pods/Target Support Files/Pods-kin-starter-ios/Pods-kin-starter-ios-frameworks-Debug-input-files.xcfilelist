@@ -1,16 +1,11 @@
 ${PODS_ROOT}/Target Support Files/Pods-kin-starter-ios/Pods-kin-starter-ios-frameworks.sh
-${BUILT_PRODUCTS_DIR}/Base58Swift/Base58Swift.framework
-${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework
 ${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework
 ${BUILT_PRODUCTS_DIR}/KinBase/KinBase.framework
-${BUILT_PRODUCTS_DIR}/KinGrpcApi/KinGrpcApi.framework
 ${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework
 ${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework
 ${BUILT_PRODUCTS_DIR}/Protobuf/protobuf.framework
-${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework
 ${BUILT_PRODUCTS_DIR}/abseil/absl.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework
 ${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework
-${BUILT_PRODUCTS_DIR}/kin-stellar-ios-mac-sdk/stellarsdk.framework

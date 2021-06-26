@@ -8,7 +8,6 @@
 
 import Foundation
 import Promises
-import KinGrpcApi
 
 public class AgoraKinAirdropApi {
     public enum Errors: Int, Error {
@@ -38,9 +37,9 @@ extension AgoraKinAirdropApi: KinAirdropApi {
             }
     }
     
-    public func airdrop(accountId: KinAccount.Id, kin: Kin = 1) -> Promise<AirdropResponse> {
+    public func airdrop(account: PublicKey, kin: Kin = 1) -> Promise<AirdropResponse> {
         return Promise { (respond, reject) in
-            self.airdrop(request: AirdropRequest(accountId: accountId, kin: kin), completion: { it in
+            self.airdrop(request: AirdropRequest(account: account, kin: kin), completion: { it in
                 respond(it)
             })
         }
