@@ -3,8 +3,8 @@
 ## Clone the repo:
 
 ```
-git clone https://github.com/kintegrate/kin-starter-node.git
-cd kin-starter-node
+git clone https://github.com/kintegrate/kin-starter-ios.git
+cd kin-starter-ios
 ```
 
 ## Install dependencies:
