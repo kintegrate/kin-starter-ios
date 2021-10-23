@@ -15,14 +15,15 @@
 #ifndef OPENSSL_HEADER_SSL_SPAN_H
 #define OPENSSL_HEADER_SSL_SPAN_H
 
-#include <openssl/base.h>
+#include <openssl_grpc/base.h>
 
 #if !defined(BORINGSSL_NO_CXX)
 
 extern "C++" {
 
+#include <stdlib.h>
+
 #include <algorithm>
-#include <cstdlib>
 #include <type_traits>
 
 BSSL_NAMESPACE_BEGIN

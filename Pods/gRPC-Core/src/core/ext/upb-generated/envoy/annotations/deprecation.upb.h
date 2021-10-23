@@ -10,11 +10,6 @@
 #define ENVOY_ANNOTATIONS_DEPRECATION_PROTO_UPB_H_
 
 #if COCOAPODS==1
-  #include  "third_party/upb/upb/generated_util.h"
-#else
-  #include  "upb/generated_util.h"
-#endif
-#if COCOAPODS==1
   #include  "third_party/upb/upb/msg.h"
 #else
   #include  "upb/msg.h"
@@ -23,6 +18,11 @@
   #include  "third_party/upb/upb/decode.h"
 #else
   #include  "upb/decode.h"
+#endif
+#if COCOAPODS==1
+  #include  "third_party/upb/upb/decode_fast.h"
+#else
+  #include  "upb/decode_fast.h"
 #endif
 #if COCOAPODS==1
   #include  "third_party/upb/upb/encode.h"

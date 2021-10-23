@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Immutable user configurable options for a gRPC call.
  */
-@interface GRPCCallOptions : NSObject<NSCopying, NSMutableCopying>
+@interface GRPCCallOptions : NSObject <NSCopying, NSMutableCopying>
 
 // Call parameters
 /**
@@ -90,6 +90,12 @@ NS_ASSUME_NONNULL_BEGIN
  * user-agent string.
  */
 @property(copy, readonly, nullable) NSString *userAgentPrefix;
+
+/**
+ * Custom string that is suffixed to a request's user-agent header field after gRPC's internal
+ * user-agent string.
+ */
+@property(copy, readonly, nullable) NSString *userAgentSuffix;
 
 /**
  * The size limit for the response received from server. If it is exceeded, an error with status
@@ -195,12 +201,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(readonly) NSUInteger channelOptionsHash;
 
+// Parameters for GTMSessionFetcher transport retry policy. This is only for internal users.
+@property(atomic, assign) NSTimeInterval maxRetryInterval;
+@property(atomic, assign) NSTimeInterval minRetryInterval;
+@property(atomic, assign) NSUInteger retryCount;
+@property(atomic, assign) double retryFactor;
+
 @end
 
 /**
  * Mutable user configurable options for a gRPC call.
  */
-@interface GRPCMutableCallOptions : GRPCCallOptions<NSCopying, NSMutableCopying>
+@interface GRPCMutableCallOptions : GRPCCallOptions <NSCopying, NSMutableCopying>
 
 // Call parameters
 /**
@@ -269,6 +281,12 @@ NS_ASSUME_NONNULL_BEGIN
  * user-agent string.
  */
 @property(copy, readwrite, nullable) NSString *userAgentPrefix;
+
+/**
+ * Custom string that is suffixed to a request's user-agent header field after gRPC's internal
+ * user-agent string.
+ */
+@property(copy, readwrite, nullable) NSString *userAgentSuffix;
 
 /**
  * The size limit for the response received from server. If it is exceeded, an error with status

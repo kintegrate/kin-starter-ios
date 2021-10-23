@@ -6,7 +6,7 @@ target 'kin-starter-ios' do
   use_frameworks!
 
   # Pods for kin-starter-ios
-  pod 'KinBase'
+  pod 'KinBase', '~> 2.1.1'
   target 'kin-starter-iosTests' do
     inherit! :search_paths
     # Pods for testing

@@ -65,9 +65,13 @@ public struct KinEnvironment {
         private static func defaultEnvironmentSetup(network: KinNetwork, appInfoProvider: AppInfoProvider, enableLogging: Bool, minApiVersion: Int, storagePath: URL?) -> KinEnvironment {
             DispatchQueue.promises = DispatchQueue(label: "KinBase.default")
             let logger = KinLoggerFactoryImpl(isLoggingEnabled: enableLogging)
-            let networkHandler = NetworkOperationHandler()
+            let networkHandler = NetworkOperationHandler(
+                shouldRetryError: { (error: Error) in
+                    error is KinServiceV4.Errors && error as! KinServiceV4.Errors == KinServiceV4.Errors.transientFailure()
+                }
+            )
             // If custom storagePath is set, use that. Otherwise provide a default.
-            let documentDirectory = storagePath ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let documentDirectory = storagePath ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("kin_storage", isDirectory: true)
             let storage = KinFileStorage(directory: documentDirectory, network: network)
             
             let grpcProxy = AgoraGrpcProxy(
@@ -134,5 +138,39 @@ extension KinEnvironment {
     
     mutating func setEnableLogging(enableLogging: Bool) {
         logger.isLoggingEnabled = enableLogging
+    }
+}
+
+
+// MARK: - import account from BackupRestoreModule -
+extension KinEnvironment {
+    /**
+         Import the account data from a JSON string.
+         - Parameter jsonString: The JSON representation of the KinAccount
+         - Parameter passphrase: The passphrase with which to decrypt the seed
+         - Returns: A KinAccount
+         */
+    func importAccount(_ jsonString: String,
+                       passphrase: String) throws -> KinAccount {
+        guard let data = jsonString.data(using: .utf8) else {
+            throw KeyUtilsError.decodingFailed("invalid data")
+        }
+        let accountData = try JSONDecoder().decode(KeyUtils.AccountData.self, from: data)
+
+        let decryptedSeed = try KeyUtils.seed(from: passphrase, encryptedSeed: accountData.seed, salt: accountData.salt)
+        if let seed = Seed(decryptedSeed) {
+            // Legacy backup, use seed
+            let keyPair = KeyPair(seed: seed)
+            try self.importPrivateKey(keyPair)
+            return KinAccount(publicKey: keyPair.publicKey, privateKey: keyPair.privateKey)
+        } else {
+            // v1+ backup, use private key
+            guard let publicKey = PublicKey(base58: accountData.pkey), let privateKey = PrivateKey(decryptedSeed) else {
+                throw KeyUtilsError.decodingFailed("invalid key")
+            }
+            let keyPair = KeyPair(publicKey: publicKey, privateKey: privateKey)
+            try self.importPrivateKey(keyPair)
+            return KinAccount(publicKey: keyPair.publicKey, privateKey: keyPair.privateKey)
+        }
     }
 }

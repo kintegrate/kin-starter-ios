@@ -54,18 +54,19 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.] */
 
-#include <openssl/asn1.h>
+#include <openssl_grpc/asn1.h>
 
 #include <assert.h>
 #include <string.h>
 
-#include <openssl/asn1t.h>
-#include <openssl/mem.h>
-#include <openssl/obj.h>
-#include <openssl/err.h>
-#include <openssl/thread.h>
+#include <openssl_grpc/asn1t.h>
+#include <openssl_grpc/mem.h>
+#include <openssl_grpc/obj.h>
+#include <openssl_grpc/err.h>
+#include <openssl_grpc/thread.h>
 
 #include "../internal.h"
+#include "asn1_locl.h"
 
 
 /* Utility functions for manipulating fields and offsets */
@@ -91,8 +92,7 @@ int asn1_set_choice_selector(ASN1_VALUE **pval, int value,
 
 static CRYPTO_refcount_t *asn1_get_references(ASN1_VALUE **pval,
                                               const ASN1_ITEM *it) {
-  if (it->itype != ASN1_ITYPE_SEQUENCE &&
-      it->itype != ASN1_ITYPE_NDEF_SEQUENCE) {
+  if (it->itype != ASN1_ITYPE_SEQUENCE) {
     return NULL;
   }
   const ASN1_AUX *aux = it->funcs;
