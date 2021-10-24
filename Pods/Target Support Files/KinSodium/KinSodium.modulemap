@@ -1,6 +1,0 @@
-framework module KinSodium {
-  umbrella header "KinSodium-umbrella.h"
-
-  export *
-  module * { export * }
-}
